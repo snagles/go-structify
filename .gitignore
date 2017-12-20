@@ -1,0 +1,3 @@
+./gostructify
+cmd/cmd
+./docker-compose.yml

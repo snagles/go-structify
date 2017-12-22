@@ -122,6 +122,10 @@ func main() {
 			Name:  "methods",
 			Usage: "list of comma delmited method options `gorm`",
 		},
+		cli.BoolTFlag{
+			Name:  "dry-run",
+			Usage: "dry-run prints output to screen instead of a file",
+		},
 	}
 
 	app.Name = "gostructify"
@@ -157,27 +161,49 @@ func process(d database.Database, c *cli.Context) {
 
 			src := structify.Generate(c, g.pkg.name, db, t)
 			// Write the file unformatted
-			output := c.GlobalString("output")
-			if output == "" {
-				baseName := fmt.Sprintf("%s_structify.go", table)
-				output = filepath.Join(dir, strings.ToLower(baseName))
-			}
-			err = ioutil.WriteFile(output, src, 0644)
-			if err != nil {
-				logrus.Fatalf("writing output: %s", err)
-			}
+			if c.GlobalBoolT("dry-run") {
+				f, err := ioutil.TempFile("", "tmp")
+				if err != nil {
+					logrus.Fatalf("failed to write temp file for dry run: %s", err)
+				}
 
-			// Run go imports to gofmt and goimports the file
-			src, err = imports.Process(output, src, nil)
-			if err != nil {
-				logrus.Fatalf("processing imports: %s", err)
-			}
+				defer os.Remove(f.Name())
 
-			err = ioutil.WriteFile(output, src, 0644)
-			if err != nil {
-				logrus.Fatalf("writing output: %s", err)
+				_, err = f.Write(src)
+				if err != nil {
+					logrus.Fatalf("writing tempfile output: %s", err)
+				}
+
+				// Run go imports to gofmt and goimports the file
+				src, err = imports.Process(f.Name(), src, nil)
+				if err != nil {
+					logrus.Fatalf("processing imports: %s", err)
+				}
+
+				fmt.Println(string(src))
+			} else {
+				output := c.GlobalString("output")
+				if output == "" {
+					baseName := fmt.Sprintf("%s_structify.go", table)
+					output = filepath.Join(dir, strings.ToLower(baseName))
+				}
+				err = ioutil.WriteFile(output, src, 0644)
+				if err != nil {
+					logrus.Fatalf("writing output: %s", err)
+				}
+
+				// Run go imports to gofmt and goimports the file
+				src, err = imports.Process(output, src, nil)
+				if err != nil {
+					logrus.Fatalf("processing imports: %s", err)
+				}
+
+				err = ioutil.WriteFile(output, src, 0644)
+				if err != nil {
+					logrus.Fatalf("writing output: %s", err)
+				}
+				fmt.Printf("Wrote file: %s", output)
 			}
-			fmt.Printf("Wrote file: %s", output)
 		}
 	}
 }

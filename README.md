@@ -9,7 +9,7 @@ Supported databases include MariaDB, MySQL, Vertica, and PostgreSQL with support
 
 ## Example
 Running:
-```gostructify --directory ~/go/src/github.com/snagles/gostructify/cmd/gostructify --tags gorm,sqlx,json --methods gorm mariadb --hostname 127.0.0.1 --username root --tables all_data_types --database test```
+```gostructify --tty --directory ~/go/src/github.com/snagles/gostructify/cmd/gostructify --tags gorm,sqlx,json --methods gorm mariadb --hostname 127.0.0.1 --username root --tables all_data_types --database test```
 
 Will output the file: ~/go/src/github.com/snagles/gostructify/cmd/gostructify/all_data_types_structify.go
 

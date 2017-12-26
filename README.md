@@ -5,11 +5,11 @@ gostructify generates go structs, types, and methods from database tables.
 Supported databases include MariaDB, MySQL, Vertica, and PostgreSQL with support for additional databases in the future. Supported datatypes depend on the database, but all "common" datatypes are supported. See the .sql files for tested and verified datatypes.
 
 ## Quickstart
-`go install github.com/snagles/gostructify/cmd/gostructify && gostructify help`
+`go get github.com/snagles/gostructify/cmd/gostructify && gostructify help`
 
 ## Example
 Running:
-```gostructify --tty --directory ~/go/src/github.com/snagles/gostructify/cmd/gostructify --tags gorm,sqlx,json --methods gorm mariadb --hostname 127.0.0.1 --username root --tables all_data_types --database test```
+```gostructify --stdin --directory ~/go/src/github.com/snagles/gostructify/cmd/gostructify --tags gorm,sqlx,json --methods gorm mariadb --hostname 127.0.0.1 --username root --tables all_data_types --database test```
 
 Will output the file: ~/go/src/github.com/snagles/gostructify/cmd/gostructify/all_data_types_structify.go
 

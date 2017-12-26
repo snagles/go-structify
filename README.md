@@ -59,7 +59,7 @@ func (a *AllDataTypes) TableName() string {
 ```
 
 After which you can regen the specific file using:
-``gostructify --file ~/go/src/github.com/snagles/gostructify/cmd/gostructify/test_gostructify.go --tags gorm,sqlx,json --methods gorm mariadb --hostname 127.0.0.1 --username root --tables all_data_types,aa --database test```
+```gostructify --file ~/go/src/github.com/snagles/gostructify/cmd/gostructify/test_gostructify.go --tags gorm,sqlx,json --methods gorm mariadb --hostname 127.0.0.1 --username root --tables all_data_types,aa --database test```
 
 ## Options Detailed
 ### Nullable Types

@@ -124,7 +124,7 @@ func main() {
 			Usage: "list of comma delmited method options `gorm`",
 		},
 		cli.BoolFlag{
-			Name:  "tty",
+			Name:  "stdin",
 			Usage: "use stdin for passing of password",
 		},
 		cli.StringFlag{
@@ -222,7 +222,7 @@ func process(d database.Database, c *cli.Context) {
 
 func getPassword(c *cli.Context, username string) string {
 	if c.GlobalString("password") == "" {
-		if c.Bool("tty") {
+		if c.GlobalBool("stdin") {
 			fmt.Printf("Enter password for user %s (if no password, leave blank): ", username)
 			password, err := gopass.GetPasswd()
 			if err != nil {
@@ -230,7 +230,7 @@ func getPassword(c *cli.Context, username string) string {
 			}
 			return string(password)
 		}
-		logrus.Fatalf("Missing password. Password either needs to be set as an env variable `GOSTRUCTIFY_PASSWORD=password`, passed on the command line, or using the --tty option to be prompted")
+		logrus.Fatalf("Missing password. Password either needs to be set as an env variable `GOSTRUCTIFY_PASSWORD=password`, passed on the command line, or using the --stdin option to be prompted")
 	}
 
 	return c.GlobalString("password")
